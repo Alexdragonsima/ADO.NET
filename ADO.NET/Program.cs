@@ -50,7 +50,7 @@ namespace ADO.NET
 				while (reader.Read())
 				{
 					//Console.WriteLine($"{reader[0].ToString().PadRight(5)}{reader[2].ToString().PadRight(15)}{reader[1].ToString().PadRight(15)}");
-					for (int i = 0; i < reader.FieldCount; i++)
+					for (int i =  0; i < reader.FieldCount; i++)
 					{
 						Console.Write(reader[i].ToString().PadRight(PADDING));
 					}

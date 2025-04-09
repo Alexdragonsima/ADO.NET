@@ -16,6 +16,8 @@ namespace Academy
 	public partial class Main : Form
 	{
 		Connector connector;
+
+		Dictionary<string, int> d_directions;
 		public Main()
 		{
 			InitializeComponent();
@@ -24,6 +26,8 @@ namespace Academy
 				(
 					ConfigurationManager.ConnectionStrings["DBMS_DDL"].ConnectionString
 				);
+			d_directions = connector.GetDictionary("*", "Directions");
+			cbGroupsDirection.Items.AddRange(d_directions.Select(K => K.Key).ToArray());
 			// dgv - dataGridview
 			dgvStudents.DataSource = connector.Select
 				(
@@ -54,10 +58,10 @@ namespace Academy
 				case 1:
 					dgvGroups.DataSource = connector.Select
 						(
-							//"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,start_time,direction_name",
-							//"Groups,Directions",
-							//"direction=direction_id"
-							"*", "Groups"
+							"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,time,direction_name",
+							"Groups,Directions",
+							"direction=direction_id"
+							//"*", "Groups"
 						);
 					toolStripStatusLabelCount.Text = $"Количество групп:{dgvGroups.RowCount - 1}.";
 					break;
@@ -93,6 +97,18 @@ namespace Academy
 					break;
 
 			}
+		}
+
+		private void cbGroupsDirection_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			dgvGroups.DataSource = connector.Select
+						(
+							"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,time,direction_name",
+							"Groups,Directions",
+							$"direction=direction_id AND direction = N'{d_directions[cbGroupsDirection.SelectedItem.ToString()]}'"
+							
+						);
+			toolStripStatusLabelCount.Text = $"Количество групп:{dgvGroups.RowCount - 1}.";
 		}
 	}
 }

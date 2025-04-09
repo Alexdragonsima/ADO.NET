@@ -61,7 +61,7 @@ namespace Academy
 							"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,time,direction_name",
 							"Groups,Directions",
 							"direction=direction_id"
-							//"*", "Groups"
+						//"*", "Groups"
 						);
 					toolStripStatusLabelCount.Text = $"Количество групп:{dgvGroups.RowCount - 1}.";
 					break;
@@ -106,9 +106,13 @@ namespace Academy
 							"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,time,direction_name",
 							"Groups,Directions",
 							$"direction=direction_id AND direction = N'{d_directions[cbGroupsDirection.SelectedItem.ToString()]}'"
-							
+
 						);
-			toolStripStatusLabelCount.Text = $"Количество групп:{dgvGroups.RowCount - 1}.";
+			toolStripStatusLabelCount.Text = $"Количество групп: {CountRecordsInDGV(dgvGroups)}.";
+		}
+		int CountRecordsInDGV(DataGridView dgv)
+		{
+			return dgv.RowCount == 0 ? 0 : dgv.RowCount - 1;
 		}
 	}
 }

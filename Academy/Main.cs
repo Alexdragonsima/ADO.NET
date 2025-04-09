@@ -30,7 +30,7 @@ namespace Academy
 					//"last_name,first_name,middle_name,birth_date,group_name,direction_name",
 					//"Students,Groups,Directions",
 					//"[group]=group_id AND direction_id"
-					"*","Students"
+					"*", "Students"
 				);
 			toolStripStatusLabelCount.Text = $"Количество студентов:{dgvStudents.RowCount - 1}.";
 		}
@@ -43,10 +43,10 @@ namespace Academy
 					dgvStudents.DataSource =
 						connector.Select
 						(
-						//	"last_name,first_name,middle_name,birth_date,group_name,direction_name",
-						//	"Students,Groups,Directions",
-						//	"[group]=group_id AND direction_id"
-							"*","Students"
+							//"last_name,first_name,middle_name,birth_date,group_name,direction_name",
+							//"Students,Groups,Directions",
+							//"[group]=group_id AND direction_id"
+							"*", "Students"
 						);
 					toolStripStatusLabelCount.Text = $"Количество студентов:{dgvStudents.RowCount - 1}.";
 					break;
@@ -57,13 +57,28 @@ namespace Academy
 							//"group_name,dbo.GetLearningDaysFor(group_name) AS weekdays,start_time,direction_name",
 							//"Groups,Directions",
 							//"direction=direction_id"
-							"*","Groups"
+							"*", "Groups"
 						);
 					toolStripStatusLabelCount.Text = $"Количество групп:{dgvGroups.RowCount - 1}.";
 					break;
 
 				case 2:
-					dgvDirections.DataSource = connector.Select("*", "Directions");
+					//dgvDirections.DataSource = connector.Select
+					//	(
+					//		//"*", "Directions"
+					//		"direction_name,COUNT(DISTINCT group_id) AS N'Количество групп' , COUNT(student_id) AS N'Количество студентов'",
+					//		"Students,Groups,Directions",
+					//		"[group]=group_id AND direction=direction_id",
+					//		"direction_name"
+					//	);
+					dgvDirections.DataSource = connector.Select
+						(
+							//"*", "Directions"
+							"direction_name,COUNT(DISTINCT group_id) AS N'Количество групп' , COUNT(student_id) AS N'Количество студентов'",
+							"Students RIGHT JOIN Groups ON([group]=group_id) RIGHT JOIN Directions ON(direction=direction_id)",
+							"",
+							"direction_name"
+						);
 					toolStripStatusLabelCount.Text = $"Количество Направлений:{dgvDirections.RowCount - 1}.";
 					break;
 
